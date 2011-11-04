@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "$1" == "-a" ]
+then
+	svn st | grep "? " | awk 'BEGIN {FS="    +"}{ print $2}' | xargs -I% svn add %
+	svn st | grep "! " | awk 'BEGIN {FS="    +"}{ print $2}' | xargs -I% svn rm %
+	exit 0
+fi
+if [ "$1" == "-r" ]
+then
+	svn st | grep "? " | awk 'BEGIN {FS="    +"}{ print $2}' | xargs -I% svn revert %
+	svn up
+	exit 0
+fi
+
+echo "usage: `basename $0` <-a|-r>"
